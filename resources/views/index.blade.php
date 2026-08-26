@@ -262,7 +262,7 @@
 
   footer{text-align:center;padding:30px 24px 50px;color:var(--ink-soft);font-size:12.5px;}
 
-  .combo-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px;}
+  .combo-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:8px;}
   @media (max-width:600px){.combo-cards{grid-template-columns:repeat(2,1fr);}}
   .combo-card{
     border:1.5px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;
@@ -471,6 +471,13 @@
 
         <h3 class="formh" style="margin-top:22px;"><span class="num">2</span>Pilih Combo</h3>
         <div class="combo-cards" id="comboCards">
+          @if(\Carbon\Carbon::now('Asia/Kuala_Lumpur')->lte(\Carbon\Carbon::parse('2026-09-05 23:59:59', 'Asia/Kuala_Lumpur')))
+          <div class="combo-card" data-type="earlybird" data-target="1">
+            <div class="cc-badge">Early Bird</div>
+            <div class="cc-title">1 Helai (Early Bird)</div>
+            <div class="cc-sub">Laki RM46 · Muslimah RM52 · Sehingga 5 Sept</div>
+          </div>
+          @endif
           <div class="combo-card" data-type="fixed" data-target="1">
             <div class="cc-badge" style="visibility:hidden;">·</div>
             <div class="cc-title">1 Helai</div>
@@ -654,6 +661,13 @@ const RATE_TABLE = {
   5: {laki:48, muslimah:54},
   7: {laki:46, muslimah:51}
 };
+const EARLYBIRD_RATE = {laki:46, muslimah:52};
+function ratesForCombo(sum){
+  if(selectedCombo && selectedCombo.type === 'earlybird'){
+    return EARLYBIRD_RATE;
+  }
+  return RATE_TABLE[tierForTotal(sum)] || {laki:0, muslimah:0};
+}
 const SIZES = ['XS','S','M','L','XL','XXL'];
 function tierForTotal(total){ if(total>=7) return 7; if(total>=5) return 5; if(total>=1) return 1; return 0; }
 
@@ -730,9 +744,11 @@ document.querySelectorAll('.combo-card').forEach(card=>{
     card.classList.add('selected');
     const type = card.dataset.type;
     const target = parseInt(card.dataset.target,10);
-    selectedCombo = { type, target: type === 'fixed' ? target : null };
+    selectedCombo = { type, target: (type === 'fixed' || type === 'earlybird') ? target : null };
     setQtyControlsEnabled(true);
-    if(type === 'fixed'){
+    if(type === 'earlybird'){
+      comboHint.textContent = 'Combo Early Bird dipilih — 1 helai sahaja. Tawaran sah sehingga 5 September.';
+    }else if(type === 'fixed'){
       comboHint.textContent = `Combo ${target} helai dipilih. Bahagikan ${target} helai antara Laki dan Muslimah di bawah.`;
     }else{
       comboHint.textContent = 'Kuantiti sendiri dipilih. Harga akan ikut jumlah keseluruhan yang anda masukkan.';
@@ -743,7 +759,7 @@ document.querySelectorAll('.combo-card').forEach(card=>{
 });
 
 function comboRemaining(excludeEl){
-  if(!selectedCombo || selectedCombo.type !== 'fixed') return Infinity;
+  if(!selectedCombo || (selectedCombo.type !== 'fixed' && selectedCombo.type !== 'earlybird')) return Infinity;
   const other = excludeEl === qtyLakiEl
     ? (parseInt(qtyMuslimahEl.value,10) || 0)
     : (parseInt(qtyLakiEl.value,10) || 0);
@@ -781,7 +797,7 @@ function computeOrder(){
   const qM = parseInt(qtyMuslimahEl.value,10) || 0;
   const sum = qL + qM;
   const tier = tierForTotal(sum);
-  const rates = RATE_TABLE[tier] || {laki:0, muslimah:0};
+  const rates = ratesForCombo(sum);
   const subL = qL * rates.laki;
   const subM = qM * rates.muslimah;
   const grandTotal = subL + subM;
@@ -794,14 +810,16 @@ function updateSplitAndReceipt(){
   const qM = parseInt(qtyMuslimahEl.value,10) || 0;
   const sum = qL + qM;
   const tier = tierForTotal(sum);
-  const rates = RATE_TABLE[tier] || {laki:0, muslimah:0};
-  rateLakiLabel.textContent = tier ? `Harga combo ${tier} helai: ${fmt(rates.laki)}/pc` : 'Pilih combo dahulu';
-  rateMuslimahLabel.textContent = tier ? `Harga combo ${tier} helai: ${fmt(rates.muslimah)}/pc` : 'Pilih combo dahulu';
+  const isEarlybird = selectedCombo && selectedCombo.type === 'earlybird';
+  const rates = ratesForCombo(sum);
+  const tierLabel = isEarlybird ? 'Early Bird' : (tier ? `${tier} helai` : null);
+  rateLakiLabel.textContent = tierLabel ? `Harga combo ${tierLabel}: ${fmt(rates.laki)}/pc` : 'Pilih combo dahulu';
+  rateMuslimahLabel.textContent = tierLabel ? `Harga combo ${tierLabel}: ${fmt(rates.muslimah)}/pc` : 'Pilih combo dahulu';
 
   if(!selectedCombo){
     splitStatus.className = 'split-status';
     splitStatus.textContent = 'Belum pilih combo.';
-  }else if(selectedCombo.type === 'fixed'){
+  }else if(selectedCombo.type === 'fixed' || selectedCombo.type === 'earlybird'){
     splitStatus.className = 'split-status ' + (sum === selectedCombo.target ? 'match' : 'mismatch');
     splitStatus.textContent = sum === selectedCombo.target
       ? `Sempurna — ${sum} / ${selectedCombo.target} helai dibahagikan.`
@@ -1003,7 +1021,7 @@ submitBtn.addEventListener('click', async ()=>{
     formErr.style.display = 'block';
     return;
   }
-  if(selectedCombo.type === 'fixed' && o.qtySum !== selectedCombo.target){
+  if((selectedCombo.type === 'fixed' || selectedCombo.type === 'earlybird') && o.qtySum !== selectedCombo.target){
     formErr.textContent = `Jumlah Laki + Muslimah mesti tepat ${selectedCombo.target} helai untuk combo ini (sekarang ${o.qtySum}).`;
     formErr.style.display = 'block';
     return;
