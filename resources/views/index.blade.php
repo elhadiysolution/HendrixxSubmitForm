@@ -559,7 +559,7 @@
           </div>
           <div class="bank-info-row">
             <span class="bi-label">No. Akaun</span>
-            <span class="bi-value">562786086418 <button type="button" class="bi-copy" id="copyAccBtn">Salin</button></span>
+            <span class="bi-value">562786086418 <button type="button" class="bi-copy" id="copyAccBtn">Copy No.</button></span>
           </div>
           <div class="bank-info-row">
             <span class="bi-label">Nama Penerima</span>
