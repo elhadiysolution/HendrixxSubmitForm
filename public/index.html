@@ -402,7 +402,7 @@
           <div class="price-tiers">
             <div class="tier"><div class="qn">1 pc</div><div class="pv">RM56</div></div>
             <div class="tier"><div class="qn">5 pc</div><div class="pv">RM54</div></div>
-            <div class="tier best"><div class="qn">7 pc</div><div class="pv">RM52</div></div>
+            <div class="tier best"><div class="qn">7 pc</div><div class="pv">RM51</div></div>
           </div>
           <button class="poster-cta" data-gender="muslimah">Tempah Baju</button>
         </div>
