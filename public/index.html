@@ -178,6 +178,14 @@
     display:flex;gap:10px;align-items:flex-start;background:var(--coral-light);color:#6B5416;
     padding:12px 14px;border-radius:10px;margin-top:12px;font-size:12.5px;line-height:1.5;
   }
+  .bank-info{background:var(--teal-light);border:1px solid var(--teal);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
+  .bank-info-head{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:var(--navy);letter-spacing:.02em;margin-bottom:10px;}
+  .bank-info-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;padding:5px 0;}
+  .bank-info-row + .bank-info-row{border-top:1px dashed rgba(21,79,72,0.15);}
+  .bank-info-row .bi-label{color:var(--ink-soft);font-size:12px;}
+  .bank-info-row .bi-value{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--navy);}
+  .bi-copy{border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;color:var(--navy);cursor:pointer;font-family:'Inter',sans-serif;}
+  .bi-copy:hover{border-color:var(--navy);}
 
   /* FORM */
   .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:24px;align-items:start;}
@@ -541,6 +549,21 @@
         </div>
 
         <h3 class="formh"><span class="num">4</span>Bukti Pembayaran <span class="required-tag">*</span></h3>
+        <div class="bank-info">
+          <div class="bank-info-head">MAYBANK RASMI HDRX EXCLUSIVE</div>
+          <div class="bank-info-row">
+            <span class="bi-label">Bank</span>
+            <span class="bi-value">Maybank</span>
+          </div>
+          <div class="bank-info-row">
+            <span class="bi-label">No. Akaun</span>
+            <span class="bi-value">562786086418 <button type="button" class="bi-copy" id="copyAccBtn">Salin</button></span>
+          </div>
+          <div class="bank-info-row">
+            <span class="bi-label">Nama Penerima</span>
+            <span class="bi-value">HENDRIXX EXCLUSIVE EMPIRE</span>
+          </div>
+        </div>
         <div class="field">
           <input type="file" id="receiptFile" accept="image/*,.pdf" style="display:none;">
           <div class="dropzone" id="dropzone">
@@ -1062,6 +1085,24 @@ function showToast(msg){
   document.getElementById('toastMsg').textContent = msg;
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'), 2600);
+}
+
+const copyAccBtn = document.getElementById('copyAccBtn');
+if(copyAccBtn){
+  copyAccBtn.addEventListener('click', async ()=>{
+    const accNo = '562786086418';
+    try{
+      await navigator.clipboard.writeText(accNo);
+    }catch(e){
+      const tmp = document.createElement('textarea');
+      tmp.value = accNo;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand('copy');
+      document.body.removeChild(tmp);
+    }
+    showToast('No. akaun disalin');
+  });
 }
 
 submitBtn.addEventListener('click', async ()=>{
