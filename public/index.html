@@ -292,6 +292,10 @@
   .size-status{font-size:11.5px;color:var(--ink-soft);margin-top:8px;font-weight:600;}
   .size-status.match{color:var(--teal);}
   .size-status.mismatch{color:#6B5416;}
+  .upgrade-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .upgrade-row .lbl{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+  .upgrade-row .lbl span{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-top:1px;}
+  .upgrade-row .size-input input{border-color:var(--gold);}
 
   .dropzone{
     border:1.5px dashed var(--line);border-radius:10px;padding:20px 16px;text-align:center;
@@ -383,7 +387,7 @@
             <div class="tier"><div class="qn">5 pc</div><div class="pv">RM48</div></div>
             <div class="tier best"><div class="qn">7 pc</div><div class="pv">RM46</div></div>
           </div>
-          <button class="poster-cta" data-gender="laki">Tempah Baju Banin</button>
+          <button class="poster-cta" data-gender="laki">Tempah Baju</button>
         </div>
       </div>
 
@@ -400,7 +404,7 @@
             <div class="tier"><div class="qn">5 pc</div><div class="pv">RM54</div></div>
             <div class="tier best"><div class="qn">7 pc</div><div class="pv">RM52</div></div>
           </div>
-          <button class="poster-cta" data-gender="muslimah">Tempah Baju Banat</button>
+          <button class="poster-cta" data-gender="muslimah">Tempah Baju</button>
         </div>
       </div>
 
@@ -415,8 +419,8 @@
     </div>
 
     <div class="size-gender-tabs">
-      <button class="sgt-btn active" data-gender="laki">Baju Laki</button>
-      <button class="sgt-btn" data-gender="muslimah">Baju Muslimah</button>
+      <button class="sgt-btn active" data-gender="laki">Size Chart Banin</button>
+      <button class="sgt-btn" data-gender="muslimah">Size Chart Banat</button>
     </div>
 
     <div class="size-chart-card" id="sizeChartLaki">
@@ -474,22 +478,22 @@
           <div class="combo-card" data-type="earlybird" data-target="1" id="earlybirdCard">
             <div class="cc-badge">Early Bird</div>
             <div class="cc-title">1 Helai (Early Bird)</div>
-            <div class="cc-sub">Laki RM46 · Muslimah RM52 · Sehingga 5 Sept</div>
+            <div class="cc-sub">Banin RM46 · banat RM52 · Sehingga 5 Sept</div>
           </div>
           <div class="combo-card" data-type="fixed" data-target="1">
             <div class="cc-badge" style="visibility:hidden;">·</div>
             <div class="cc-title">1 Helai</div>
-            <div class="cc-sub">Laki RM50 · Muslimah RM56</div>
+            <div class="cc-sub">Banin RM50 · banat RM56</div>
           </div>
           <div class="combo-card" data-type="fixed" data-target="5">
             <div class="cc-badge">Popular</div>
             <div class="cc-title">5 Helai</div>
-            <div class="cc-sub">Laki RM48 · Muslimah RM54</div>
+            <div class="cc-sub">Banin RM48 · banat RM54</div>
           </div>
           <div class="combo-card" data-type="fixed" data-target="7">
             <div class="cc-badge">Jimat maksimum</div>
             <div class="cc-title">7 Helai</div>
-            <div class="cc-sub">Laki RM46 · Muslimah RM51</div>
+            <div class="cc-sub">Banin RM46 · banat RM51</div>
           </div>
         </div>
         <div class="combo-hint" id="comboHint">Sila pilih combo di atas dahulu sebelum tetapkan kuantiti.</div>
@@ -497,7 +501,7 @@
         <h3 class="formh" style="margin-top:22px;"><span class="num">3</span>Bahagikan Kuantiti</h3>
         <div class="qty-block" id="blockLaki" style="flex-direction:column;align-items:stretch;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div class="lbl">Baju Laki<span id="rateLakiLabel">Pilih combo dahulu</span></div>
+            <div class="lbl">Baju Banin<span id="rateLakiLabel">Pilih combo dahulu</span></div>
             <div class="stepper" style="justify-content:flex-end;">
               <button type="button" data-target="qtyLaki" data-step="-1" disabled>−</button>
               <input type="number" id="qtyLaki" value="0" min="0" disabled>
@@ -506,10 +510,15 @@
           </div>
           <div class="size-grid" id="sizeGridLaki"></div>
           <div class="size-status" id="sizeStatusLaki"></div>
+          <div class="upgrade-row" style="flex-direction:column;align-items:stretch;">
+            <div class="lbl">Naik taraf Lycra Premium (ikut saiz)<span>+RM10 / helai — had ikut kuantiti saiz di atas</span></div>
+            <div class="size-grid" id="lycraGridLaki"></div>
+            <div class="size-status" id="lycraStatusLaki"></div>
+          </div>
         </div>
         <div class="qty-block" id="blockMuslimah" style="flex-direction:column;align-items:stretch;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div class="lbl">Baju Muslimah<span id="rateMuslimahLabel">Pilih combo dahulu</span></div>
+            <div class="lbl">Baju Banat<span id="rateMuslimahLabel">Pilih combo dahulu</span></div>
             <div class="stepper" style="justify-content:flex-end;">
               <button type="button" data-target="qtyMuslimah" data-step="-1" disabled>−</button>
               <input type="number" id="qtyMuslimah" value="0" min="0" disabled>
@@ -518,6 +527,11 @@
           </div>
           <div class="size-grid" id="sizeGridMuslimah"></div>
           <div class="size-status" id="sizeStatusMuslimah"></div>
+          <div class="upgrade-row" style="flex-direction:column;align-items:stretch;">
+            <div class="lbl">Naik taraf Lycra Premium (ikut saiz)<span>+RM10 / helai — had ikut kuantiti saiz di atas</span></div>
+            <div class="size-grid" id="lycraGridMuslimah"></div>
+            <div class="size-status" id="lycraStatusMuslimah"></div>
+          </div>
         </div>
         <div class="split-status" id="splitStatus"></div>
 
@@ -598,7 +612,7 @@
         <thead>
           <tr>
             <th>Tarikh</th><th>Ejen</th><th>Sekolah</th><th>Pelanggan</th><th>Telefon</th>
-            <th>Combo</th><th>Banin</th><th>Banat</th><th>Jumlah</th><th>Komisen</th><th>Catatan</th><th>Resit</th>
+            <th>Combo</th><th>Banin</th><th>Banat</th><th>Lycra Banin</th><th>Lycra Banat</th><th>Jumlah</th><th>Komisen</th><th>Catatan</th><th>Resit</th>
           </tr>
         </thead>
         <tbody id="ordersTbody"></tbody>
@@ -625,7 +639,7 @@
         <h3 style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--navy);margin:0 0 10px;">Baju Banin</h3>
         <div class="tblwrap">
           <table class="admin-table" id="sizeSummaryLakiTable">
-            <thead><tr><th>Saiz</th><th>Jumlah helai</th></tr></thead>
+            <thead><tr><th>Saiz</th><th>Jumlah helai</th><th>Lycra</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -634,7 +648,7 @@
         <h3 style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--navy);margin:0 0 10px;">Baju Banat</h3>
         <div class="tblwrap">
           <table class="admin-table" id="sizeSummaryMuslimahTable">
-            <thead><tr><th>Saiz</th><th>Jumlah helai</th></tr></thead>
+            <thead><tr><th>Saiz</th><th>Jumlah helai</th><th>Lycra</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -665,6 +679,7 @@ if(new Date() > EARLYBIRD_DEADLINE){
   const eb = document.getElementById('earlybirdCard');
   if(eb) eb.remove();
 }
+const LYCRA_SURCHARGE = 10;
 function ratesForCombo(sum){
   if(selectedCombo && selectedCombo.type === 'earlybird'){
     return EARLYBIRD_RATE;
@@ -688,12 +703,51 @@ function buildSizeGrid(containerId, prefix){
       let val = Math.max(0, parseInt(inp.value,10) || 0);
       val = Math.min(val, sizeRemaining(prefix, inp.dataset.size));
       inp.value = val;
+      clampLycraForSize(prefix, inp.dataset.size);
       updateSplitAndReceipt();
     });
   });
 }
 buildSizeGrid('sizeGridLaki', 'szL');
 buildSizeGrid('sizeGridMuslimah', 'szM');
+
+function lycraMaxForSize(sizePrefix, sz){
+  const el = document.getElementById(sizePrefix + '_' + sz);
+  return el ? (parseInt(el.value,10) || 0) : 0;
+}
+function clampLycraForSize(sizePrefix, sz){
+  const lycPrefix = sizePrefix === 'szL' ? 'lycL' : 'lycM';
+  const lycEl = document.getElementById(lycPrefix + '_' + sz);
+  if(!lycEl) return;
+  const maxVal = lycraMaxForSize(sizePrefix, sz);
+  if((parseInt(lycEl.value,10) || 0) > maxVal) lycEl.value = maxVal;
+}
+function clampAllLycra(){
+  SIZES.forEach(sz=>{
+    clampLycraForSize('szL', sz);
+    clampLycraForSize('szM', sz);
+  });
+}
+function buildLycraGrid(containerId, lycraPrefix, sizePrefix){
+  const container = document.getElementById(containerId);
+  container.innerHTML = SIZES.map(sz => `
+    <div class="size-input">
+      <span class="sz-label">${sz}</span>
+      <input type="number" min="0" value="0" data-size="${sz}" id="${lycraPrefix}_${sz}" disabled>
+    </div>
+  `).join('');
+  container.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      if(inp.value === '') return;
+      let val = Math.max(0, parseInt(inp.value,10) || 0);
+      val = Math.min(val, lycraMaxForSize(sizePrefix, inp.dataset.size));
+      inp.value = val;
+      updateSplitAndReceipt();
+    });
+  });
+}
+buildLycraGrid('lycraGridLaki', 'lycL', 'szL');
+buildLycraGrid('lycraGridMuslimah', 'lycM', 'szM');
 
 function getSizeCounts(prefix){
   const counts = {};
@@ -728,6 +782,8 @@ const comboHint = document.getElementById('comboHint');
 const splitStatus = document.getElementById('splitStatus');
 const rateLakiLabel = document.getElementById('rateLakiLabel');
 const rateMuslimahLabel = document.getElementById('rateMuslimahLabel');
+const lycraStatusLaki = document.getElementById('lycraStatusLaki');
+const lycraStatusMuslimah = document.getElementById('lycraStatusMuslimah');
 const sizeStatusLaki = document.getElementById('sizeStatusLaki');
 const sizeStatusMuslimah = document.getElementById('sizeStatusMuslimah');
 
@@ -739,6 +795,8 @@ function setQtyControlsEnabled(enabled){
   });
   setSizeInputsEnabled('szL', enabled);
   setSizeInputsEnabled('szM', enabled);
+  setSizeInputsEnabled('lycL', enabled);
+  setSizeInputsEnabled('lycM', enabled);
 }
 
 document.querySelectorAll('.combo-card').forEach(card=>{
@@ -798,17 +856,20 @@ function fmt(n){ return 'RM' + n.toLocaleString('en-MY', {minimumFractionDigits:
 function computeOrder(){
   const qL = parseInt(qtyLakiEl.value,10) || 0;
   const qM = parseInt(qtyMuslimahEl.value,10) || 0;
+  const upgL = Math.min(getSizeSum('lycL'), qL);
+  const upgM = Math.min(getSizeSum('lycM'), qM);
   const sum = qL + qM;
   const tier = tierForTotal(sum);
   const rates = ratesForCombo(sum);
-  const subL = qL * rates.laki;
-  const subM = qM * rates.muslimah;
+  const subL = qL * rates.laki + upgL * LYCRA_SURCHARGE;
+  const subM = qM * rates.muslimah + upgM * LYCRA_SURCHARGE;
   const grandTotal = subL + subM;
   const commission = sum * RATE_EJEN;
-  return {qL,qM,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
+  return {qL,qM,upgL,upgM,lycraSurcharge:LYCRA_SURCHARGE,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
 }
 
 function updateSplitAndReceipt(){
+  clampAllLycra();
   const qL = parseInt(qtyLakiEl.value,10) || 0;
   const qM = parseInt(qtyMuslimahEl.value,10) || 0;
   const sum = qL + qM;
@@ -863,6 +924,17 @@ function updateSplitAndReceipt(){
       if(el) el.max = sizeRemaining(prefix, sz);
     });
   });
+  [['szL','lycL'],['szM','lycM']].forEach(([sizePrefix,lycPrefix])=>{
+    SIZES.forEach(sz=>{
+      const el = document.getElementById(lycPrefix + '_' + sz);
+      if(el) el.max = lycraMaxForSize(sizePrefix, sz);
+    });
+  });
+
+  const lycSumL = getSizeSum('lycL');
+  lycraStatusLaki.textContent = lycSumL > 0 ? `Lycra: ${lycSumL} / ${qL} helai dinaik taraf` : '';
+  const lycSumM = getSizeSum('lycM');
+  lycraStatusMuslimah.textContent = lycSumM > 0 ? `Lycra: ${lycSumM} / ${qM} helai dinaik taraf` : '';
 
   renderReceipt();
 }
@@ -875,10 +947,16 @@ function renderReceipt(){
   }
   let html = '';
   if(o.qL > 0){
-    html += `<div class="rline"><span>Baju Laki x${o.qL}<div class="sub">@ ${fmt(o.rL)} / pc</div></span><span>${fmt(o.subL)}</span></div>`;
+    html += `<div class="rline"><span>Baju Laki x${o.qL}<div class="sub">@ ${fmt(o.rL)} / pc</div></span><span>${fmt(o.qL * o.rL)}</span></div>`;
+    if(o.upgL > 0){
+      html += `<div class="rline"><span>Naik taraf Lycra Premium x${o.upgL}<div class="sub">@ +${fmt(o.lycraSurcharge)} / pc</div></span><span>${fmt(o.upgL * o.lycraSurcharge)}</span></div>`;
+    }
   }
   if(o.qM > 0){
-    html += `<div class="rline"><span>Baju Muslimah x${o.qM}<div class="sub">@ ${fmt(o.rM)} / pc</div></span><span>${fmt(o.subM)}</span></div>`;
+    html += `<div class="rline"><span>Baju Muslimah x${o.qM}<div class="sub">@ ${fmt(o.rM)} / pc</div></span><span>${fmt(o.qM * o.rM)}</span></div>`;
+    if(o.upgM > 0){
+      html += `<div class="rline"><span>Naik taraf Lycra Premium x${o.upgM}<div class="sub">@ +${fmt(o.lycraSurcharge)} / pc</div></span><span>${fmt(o.upgM * o.lycraSurcharge)}</span></div>`;
+    }
   }
   html += '<div class="rdash"></div>';
   html += `<div class="rtotal"><span>Jumlah</span><span>${fmt(o.total)}</span></div>`;
@@ -1054,6 +1132,8 @@ submitBtn.addEventListener('click', async ()=>{
     agentName, schoolName, custName, custPhone, custAddr, notes,
     comboType: selectedCombo.type, comboTarget: selectedCombo.target,
     qtyLaki: o.qL, qtyMuslimah: o.qM,
+    upgradeQtyLaki: o.upgL, upgradeQtyMuslimah: o.upgM, lycraSurcharge: o.lycraSurcharge,
+    lycraSizeLaki: getSizeCounts('lycL'), lycraSizeMuslimah: getSizeCounts('lycM'),
     sizeLaki, sizeMuslimah,
     priceLaki: o.rL, priceMuslimah: o.rM,
     subtotalLaki: o.subL, subtotalMuslimah: o.subM,
@@ -1077,6 +1157,8 @@ submitBtn.addEventListener('click', async ()=>{
     SIZES.forEach(sz=>{
       document.getElementById('szL_' + sz).value = 0;
       document.getElementById('szM_' + sz).value = 0;
+      document.getElementById('lycL_' + sz).value = 0;
+      document.getElementById('lycM_' + sz).value = 0;
     });
     selectedCombo = null;
     document.querySelectorAll('.combo-card').forEach(c=>c.classList.remove('selected'));
@@ -1136,11 +1218,15 @@ function sheetRowToOrder(row){
     commission: Number(row['Commission']) || 0,
     notes: row['Notes'] || '',
     receiptUrl: row['Receipt'] || '',
+    upgradeQtyLaki: Number(row['Upgrade Qty Laki (Lycra)']) || 0,
+    upgradeQtyMuslimah: Number(row['Upgrade Qty Muslimah (Lycra)']) || 0,
+    lycraSizeLaki: safeParseJson(row['Lycra Size Laki']),
+    lycraSizeMuslimah: safeParseJson(row['Lycra Size Muslimah']),
   };
 }
 async function loadOrders(){
   const tbody = document.getElementById('ordersTbody');
-  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--ink-soft);">Memuatkan...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:var(--ink-soft);">Memuatkan...</td></tr>';
   try{
     const res = await fetch(SHEETS_WEBAPP_URL + '?type=submissions');
     const data = await res.json();
@@ -1153,7 +1239,7 @@ async function loadOrders(){
     renderSchoolSummary(allOrders);
     renderSizeSummary(allOrders);
   }catch(e){
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--danger);">Gagal muatkan pesanan.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:var(--danger);">Gagal muatkan pesanan.</td></tr>';
   }
 }
 
@@ -1163,11 +1249,13 @@ function renderStats(orders){
   const totalCommission = orders.reduce((s,o)=>s+o.commission,0);
   const totalCost = orders.reduce((s,o)=>s+(o.qtyLaki*COST_LAKI)+(o.qtyMuslimah*COST_MUSLIMAH),0);
   const totalProfitHx = totalSales - totalCost;
+  const totalLycra = orders.reduce((s,o)=>s+(o.upgradeQtyLaki||0)+(o.upgradeQtyMuslimah||0),0);
   document.getElementById('adminStats').innerHTML = `
     <div class="stat"><div class="l">Total helaian</div><div class="v">${totalHelaian}</div></div>
     <div class="stat"><div class="l">Total sales</div><div class="v">${fmt(totalSales)}</div></div>
     <div class="stat"><div class="l">Total profit Hx</div><div class="v">${fmt(totalProfitHx)}</div></div>
     <div class="stat"><div class="l">Total komisen ejen</div><div class="v">${fmt(totalCommission)}</div></div>
+    <div class="stat"><div class="l">Total naik taraf Lycra</div><div class="v">${totalLycra} pc</div></div>
   `;
 }
 
@@ -1196,7 +1284,9 @@ function renderSchoolSummary(orders){
 function renderSizeSummary(orders){
   const lakiTotals = {};
   const muslimahTotals = {};
-  SIZES.forEach(sz=>{ lakiTotals[sz] = 0; muslimahTotals[sz] = 0; });
+  const lakiLycraTotals = {};
+  const muslimahLycraTotals = {};
+  SIZES.forEach(sz=>{ lakiTotals[sz] = 0; muslimahTotals[sz] = 0; lakiLycraTotals[sz] = 0; muslimahLycraTotals[sz] = 0; });
   orders.forEach(o=>{
     if(o.sizeLaki){
       SIZES.forEach(sz=>{ lakiTotals[sz] += (o.sizeLaki[sz] || 0); });
@@ -1204,23 +1294,37 @@ function renderSizeSummary(orders){
     if(o.sizeMuslimah){
       SIZES.forEach(sz=>{ muslimahTotals[sz] += (o.sizeMuslimah[sz] || 0); });
     }
+    if(o.lycraSizeLaki){
+      SIZES.forEach(sz=>{ lakiLycraTotals[sz] += (o.lycraSizeLaki[sz] || 0); });
+    }
+    if(o.lycraSizeMuslimah){
+      SIZES.forEach(sz=>{ muslimahLycraTotals[sz] += (o.lycraSizeMuslimah[sz] || 0); });
+    }
   });
   const lakiGrand = SIZES.reduce((s,sz)=>s+lakiTotals[sz],0);
   const muslimahGrand = SIZES.reduce((s,sz)=>s+muslimahTotals[sz],0);
+  const lakiLycraGrand = SIZES.reduce((s,sz)=>s+lakiLycraTotals[sz],0);
+  const muslimahLycraGrand = SIZES.reduce((s,sz)=>s+muslimahLycraTotals[sz],0);
 
   const lakiBody = document.querySelector('#sizeSummaryLakiTable tbody');
-  lakiBody.innerHTML = SIZES.map(sz=>`<tr><td>${sz}</td><td>${lakiTotals[sz]}</td></tr>`).join('')
-    + `<tr style="font-weight:600;"><td>Jumlah</td><td>${lakiGrand}</td></tr>`;
+  lakiBody.innerHTML = SIZES.map(sz=>`<tr><td>${sz}</td><td>${lakiTotals[sz]}</td><td>${lakiLycraTotals[sz] || '-'}</td></tr>`).join('')
+    + `<tr style="font-weight:600;"><td>Jumlah</td><td>${lakiGrand}</td><td>${lakiLycraGrand}</td></tr>`;
 
   const muslimahBody = document.querySelector('#sizeSummaryMuslimahTable tbody');
-  muslimahBody.innerHTML = SIZES.map(sz=>`<tr><td>${sz}</td><td>${muslimahTotals[sz]}</td></tr>`).join('')
-    + `<tr style="font-weight:600;"><td>Jumlah</td><td>${muslimahGrand}</td></tr>`;
+  muslimahBody.innerHTML = SIZES.map(sz=>`<tr><td>${sz}</td><td>${muslimahTotals[sz]}</td><td>${muslimahLycraTotals[sz] || '-'}</td></tr>`).join('')
+    + `<tr style="font-weight:600;"><td>Jumlah</td><td>${muslimahGrand}</td><td>${muslimahLycraGrand}</td></tr>`;
+}
+
+function formatSizeBreakdown(sizeObj){
+  if(!sizeObj) return '-';
+  const parts = SIZES.filter(sz => (sizeObj[sz] || 0) > 0).map(sz => `${sz}:${sizeObj[sz]}`);
+  return parts.length ? parts.join(', ') : '-';
 }
 
 function renderOrders(orders){
   const tbody = document.getElementById('ordersTbody');
   if(orders.length === 0){
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--ink-soft);">Belum ada pesanan.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:var(--ink-soft);">Belum ada pesanan.</td></tr>';
     return;
   }
   tbody.innerHTML = orders.map((o)=>{
@@ -1229,7 +1333,9 @@ function renderOrders(orders){
     const receiptCell = o.receiptUrl
       ? `<a href="${escapeHtml(o.receiptUrl)}" target="_blank" rel="noopener" class="receipt-thumb-btn" style="text-decoration:none;">Lihat</a>`
       : '-';
-    const comboLabel = o.comboType === 'fixed' ? `${o.comboTarget} helai` : (o.comboType === 'custom' ? 'Sendiri' : '-');
+    const comboLabel = o.comboType === 'fixed' ? `${o.comboTarget} helai`
+      : o.comboType === 'earlybird' ? 'Early Bird'
+      : o.comboType === 'custom' ? 'Sendiri' : '-';
     return `<tr>
       <td>${dateStr}</td>
       <td><span class="pill">${escapeHtml(o.agentName)}</span></td>
@@ -1239,6 +1345,8 @@ function renderOrders(orders){
       <td>${escapeHtml(comboLabel)}</td>
       <td>${o.qtyLaki > 0 ? o.qtyLaki + ' pc' : '-'}</td>
       <td>${o.qtyMuslimah > 0 ? o.qtyMuslimah + ' pc' : '-'}</td>
+      <td>${escapeHtml(formatSizeBreakdown(o.lycraSizeLaki))}</td>
+      <td>${escapeHtml(formatSizeBreakdown(o.lycraSizeMuslimah))}</td>
       <td>${fmt(o.total)}</td>
       <td>${fmt(o.commission)}</td>
       <td>${escapeHtml(o.notes || '-')}</td>
