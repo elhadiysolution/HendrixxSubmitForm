@@ -337,7 +337,7 @@
   <div class="nav-links">
     <a href="#posters">Produk</a>
     <a href="#saiz">Saiz</a>
-    <button class="admin-link" id="tabAdmin">Ejen login</button>
+    <!-- <button class="admin-link" id="tabAdmin">Ejen login</button> -->
   </div>
 </nav>
 
