@@ -1181,12 +1181,15 @@ submitBtn.addEventListener('click', async ()=>{
 /* admin toggle */
 const mainContent = document.getElementById('mainContent');
 const adminSection = document.getElementById('adminSection');
-document.getElementById('tabAdmin').addEventListener('click', ()=>{
-  mainContent.style.display = 'none';
-  adminSection.style.display = 'block';
-  window.scrollTo(0,0);
-  loadOrders();
-});
+const tabAdminBtn = document.getElementById('tabAdmin');
+if(tabAdminBtn){
+  tabAdminBtn.addEventListener('click', ()=>{
+    mainContent.style.display = 'none';
+    adminSection.style.display = 'block';
+    window.scrollTo(0,0);
+    loadOrders();
+  });
+}
 document.getElementById('backBtn').addEventListener('click', ()=>{
   adminSection.style.display = 'none';
   mainContent.style.display = 'block';
