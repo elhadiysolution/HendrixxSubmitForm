@@ -563,7 +563,7 @@
           </div>
           <div class="delivery-card" data-method="home">
             <div class="dc-title">Hantar ke Rumah</div>
-            <div class="dc-sub">+RM7 — pos ke alamat pelanggan</div>
+            <div class="dc-sub">Pos +RM8 (1–4 helai) / +RM15 (5 helai ke atas)</div>
           </div>
         </div>
         <div class="combo-hint" id="deliveryHint">Sila pilih kaedah penghantaran.</div>
@@ -714,7 +714,7 @@
 <script>
 const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwR44uCj-lCYhg10sty97MkZwjekE2II5dbQt4LFrbCWJlgtHPGqRlyhwcgZOHs0u6a/exec';
 const RATE_EJEN = 4.5;
-const DELIVERY_FEE = 7;
+function homeDeliveryFee(qtySum){ return qtySum >= 5 ? 15 : 8; }
 const COST_LAKI = 27.5;
 const COST_MUSLIMAH = 32.5;
 const RATE_TABLE = {
@@ -883,7 +883,7 @@ document.querySelectorAll('.delivery-card').forEach(card=>{
     card.classList.add('selected');
     deliveryMethod = card.dataset.method;
     deliveryHint.textContent = deliveryMethod === 'home'
-      ? 'Hantar ke rumah dipilih — caj pos +RM7. Pastikan alamat penghantaran diisi.'
+      ? 'Hantar ke rumah dipilih — caj pos +RM8 (1–4 helai) atau +RM15 (5 helai ke atas). Pastikan alamat penghantaran diisi.'
       : 'Hantar ke sekolah dipilih — percuma.';
     deliveryHint.classList.add('ok');
     updateSplitAndReceipt();
@@ -936,7 +936,7 @@ function computeOrder(){
   const surM = sizeSurchargeBreakdown('szM');
   const subL = qL * rates.laki + upgL * LYCRA_SURCHARGE + surL.total;
   const subM = qM * rates.muslimah + upgM * LYCRA_SURCHARGE + surM.total;
-  const deliveryFee = deliveryMethod === 'home' ? DELIVERY_FEE : 0;
+  const deliveryFee = deliveryMethod === 'home' ? homeDeliveryFee(sum) : 0;
   const grandTotal = subL + subM + deliveryFee;
   const commission = sum * RATE_EJEN;
   return {qL,qM,upgL,upgM,lycraSurcharge:LYCRA_SURCHARGE,surL,surM,deliveryMethod,deliveryFee,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
@@ -1045,7 +1045,7 @@ function renderReceipt(){
     html += surchargeLines('Baju Muslimah', o.surM);
   }
   if(o.deliveryMethod === 'home'){
-    html += `<div class="rline"><span>Penghantaran ke rumah<div class="sub">Caj pos</div></span><span>${fmt(o.deliveryFee)}</span></div>`;
+    html += `<div class="rline"><span>Penghantaran ke rumah<div class="sub">Caj pos — ${o.qtySum >= 5 ? '5 helai ke atas' : '1–4 helai'}</div></span><span>${fmt(o.deliveryFee)}</span></div>`;
   }else if(o.deliveryMethod === 'school'){
     html += `<div class="rline"><span>Penghantaran ke sekolah<div class="sub">Kutip di sekolah</div></span><span>Percuma</span></div>`;
   }
