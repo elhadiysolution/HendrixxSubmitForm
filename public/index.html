@@ -292,6 +292,16 @@
   }
   .split-status.match{background:var(--teal-light);border-color:var(--teal);color:var(--teal);}
   .split-status.mismatch{background:var(--coral-light);border-color:var(--coral);color:#6B5416;}
+  .delivery-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+  @media (max-width:600px){.delivery-cards{grid-template-columns:1fr;}}
+  .delivery-card{
+    border:1.5px solid var(--line);border-radius:12px;padding:14px 12px;text-align:center;
+    cursor:pointer;background:#fff;transition:border-color .15s ease,background .15s ease,transform .15s ease;
+  }
+  .delivery-card:hover{border-color:var(--navy);transform:translateY(-2px);}
+  .delivery-card.selected{border-color:var(--navy);background:var(--teal-light);}
+  .delivery-card .dc-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--navy);}
+  .delivery-card .dc-sub{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
   .size-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:12px;}
   @media (max-width:600px){.size-grid{grid-template-columns:repeat(3,1fr);}}
   .size-input{display:flex;flex-direction:column;gap:4px;align-items:center;}
@@ -543,12 +553,25 @@
         </div>
         <div class="split-status" id="splitStatus"></div>
 
+        <h3 class="formh" style="margin-top:22px;"><span class="num">4</span>Kaedah Penghantaran <span class="required-tag">*</span></h3>
+        <div class="delivery-cards" id="deliveryCards">
+          <div class="delivery-card" data-method="school">
+            <div class="dc-title">Hantar ke Sekolah</div>
+            <div class="dc-sub">Percuma — kutip di sekolah</div>
+          </div>
+          <div class="delivery-card" data-method="home">
+            <div class="dc-title">Hantar ke Rumah</div>
+            <div class="dc-sub">+RM7 — pos ke alamat pelanggan</div>
+          </div>
+        </div>
+        <div class="combo-hint" id="deliveryHint">Sila pilih kaedah penghantaran.</div>
+
         <div class="field" style="margin-top:6px;">
           <label>Catatan (saiz, warna, dll)</label>
           <textarea id="orderNotes" placeholder="Contoh: 2x saiz M, 1x saiz L"></textarea>
         </div>
 
-        <h3 class="formh"><span class="num">4</span>Bukti Pembayaran <span class="required-tag">*</span></h3>
+        <h3 class="formh"><span class="num">5</span>Bukti Pembayaran <span class="required-tag">*</span></h3>
         <div class="bank-info">
           <div class="bank-info-head">MAYBANK RASMI HDRX EXCLUSIVE</div>
           <div class="bank-info-row">
@@ -689,6 +712,7 @@
 <script>
 const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwR44uCj-lCYhg10sty97MkZwjekE2II5dbQt4LFrbCWJlgtHPGqRlyhwcgZOHs0u6a/exec';
 const RATE_EJEN = 4.5;
+const DELIVERY_FEE = 7;
 const COST_LAKI = 27.5;
 const COST_MUSLIMAH = 32.5;
 const RATE_TABLE = {
@@ -823,6 +847,7 @@ const sizeStatusLaki = document.getElementById('sizeStatusLaki');
 const sizeStatusMuslimah = document.getElementById('sizeStatusMuslimah');
 
 let selectedCombo = null;
+let deliveryMethod = null;
 
 function setQtyControlsEnabled(enabled){
   document.querySelectorAll('#blockLaki .stepper button, #blockLaki .stepper input, #blockMuslimah .stepper button, #blockMuslimah .stepper input').forEach(el=>{
@@ -850,6 +875,20 @@ document.querySelectorAll('.combo-card').forEach(card=>{
       comboHint.textContent = 'Kuantiti sendiri dipilih. Harga akan ikut jumlah keseluruhan yang anda masukkan.';
     }
     comboHint.classList.add('ok');
+    updateSplitAndReceipt();
+  });
+});
+
+const deliveryHint = document.getElementById('deliveryHint');
+document.querySelectorAll('.delivery-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    deliveryMethod = card.dataset.method;
+    deliveryHint.textContent = deliveryMethod === 'home'
+      ? 'Hantar ke rumah dipilih — caj pos +RM7. Pastikan alamat penghantaran diisi.'
+      : 'Hantar ke sekolah dipilih — percuma.';
+    deliveryHint.classList.add('ok');
     updateSplitAndReceipt();
   });
 });
@@ -900,9 +939,10 @@ function computeOrder(){
   const surM = sizeSurchargeBreakdown('szM');
   const subL = qL * rates.laki + upgL * LYCRA_SURCHARGE + surL.total;
   const subM = qM * rates.muslimah + upgM * LYCRA_SURCHARGE + surM.total;
-  const grandTotal = subL + subM;
+  const deliveryFee = deliveryMethod === 'home' ? DELIVERY_FEE : 0;
+  const grandTotal = subL + subM + deliveryFee;
   const commission = sum * RATE_EJEN;
-  return {qL,qM,upgL,upgM,lycraSurcharge:LYCRA_SURCHARGE,surL,surM,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
+  return {qL,qM,upgL,upgM,lycraSurcharge:LYCRA_SURCHARGE,surL,surM,deliveryMethod,deliveryFee,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
 }
 
 function updateSplitAndReceipt(){
@@ -1006,6 +1046,11 @@ function renderReceipt(){
       html += `<div class="rline"><span>Naik taraf Lycra Premium x${o.upgM}<div class="sub">@ +${fmt(o.lycraSurcharge)} / pc</div></span><span>${fmt(o.upgM * o.lycraSurcharge)}</span></div>`;
     }
     html += surchargeLines('Baju Muslimah', o.surM);
+  }
+  if(o.deliveryMethod === 'home'){
+    html += `<div class="rline"><span>Penghantaran ke rumah<div class="sub">Caj pos</div></span><span>${fmt(o.deliveryFee)}</span></div>`;
+  }else if(o.deliveryMethod === 'school'){
+    html += `<div class="rline"><span>Penghantaran ke sekolah<div class="sub">Kutip di sekolah</div></span><span>Percuma</span></div>`;
   }
   html += '<div class="rdash"></div>';
   html += `<div class="rtotal"><span>Jumlah</span><span>${fmt(o.total)}</span></div>`;
@@ -1188,6 +1233,18 @@ submitBtn.addEventListener('click', async ()=>{
     document.getElementById('sizeGridMuslimah').scrollIntoView({behavior:'smooth', block:'center'});
     return;
   }
+  if(!deliveryMethod){
+    formErr.textContent = 'Sila pilih kaedah penghantaran (sekolah atau rumah).';
+    formErr.style.display = 'block';
+    document.getElementById('deliveryCards').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  if(deliveryMethod === 'home' && !custAddr){
+    formErr.textContent = 'Sila isi alamat penghantaran untuk hantar ke rumah.';
+    formErr.style.display = 'block';
+    document.getElementById('custAddr').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
   if(!receiptBase64){
     formErr.textContent = 'Sila upload resit / bukti pembayaran sebelum hantar.';
     formErr.style.display = 'block';
@@ -1201,6 +1258,7 @@ submitBtn.addEventListener('click', async ()=>{
     qtyLaki: o.qL, qtyMuslimah: o.qM,
     upgradeQtyLaki: o.upgL, upgradeQtyMuslimah: o.upgM, lycraSurcharge: o.lycraSurcharge,
     sizeSurchargeLaki: o.surL.total, sizeSurchargeMuslimah: o.surM.total,
+    deliveryMethod: o.deliveryMethod, deliveryFee: o.deliveryFee,
     lycraSizeLaki: getSizeCounts('lycL'), lycraSizeMuslimah: getSizeCounts('lycM'),
     sizeLaki, sizeMuslimah,
     priceLaki: o.rL, priceMuslimah: o.rM,
@@ -1230,6 +1288,10 @@ submitBtn.addEventListener('click', async ()=>{
     });
     selectedCombo = null;
     document.querySelectorAll('.combo-card').forEach(c=>c.classList.remove('selected'));
+    deliveryMethod = null;
+    document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
+    deliveryHint.textContent = 'Sila pilih kaedah penghantaran.';
+    deliveryHint.classList.remove('ok');
     setQtyControlsEnabled(false);
     comboHint.textContent = 'Sila pilih combo di atas dahulu sebelum tetapkan kuantiti.';
     comboHint.classList.remove('ok');
