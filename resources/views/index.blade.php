@@ -486,10 +486,6 @@
             <input type="tel" id="custPhone" placeholder="01X-XXXXXXX">
           </div>
         </div>
-        <div class="field">
-          <label>Alamat penghantaran</label>
-          <textarea id="custAddr" placeholder="Alamat penuh untuk posting"></textarea>
-        </div>
 
         <h3 class="formh" style="margin-top:22px;"><span class="num">2</span>Pilih Combo</h3>
         <div class="combo-cards" id="comboCards">
@@ -567,6 +563,11 @@
           </div>
         </div>
         <div class="combo-hint" id="deliveryHint">Sila pilih kaedah penghantaran.</div>
+
+        <div class="field" id="addrField" style="display:none;">
+          <label>Alamat penghantaran <span class="required-tag">*</span></label>
+          <textarea id="custAddr" placeholder="Alamat penuh untuk posting"></textarea>
+        </div>
 
         <div class="field" style="margin-top:6px;">
           <label>Catatan (saiz, warna, dll)</label>
@@ -877,6 +878,7 @@ document.querySelectorAll('.combo-card').forEach(card=>{
 });
 
 const deliveryHint = document.getElementById('deliveryHint');
+const addrField = document.getElementById('addrField');
 document.querySelectorAll('.delivery-card').forEach(card=>{
   card.addEventListener('click', ()=>{
     document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
@@ -886,6 +888,8 @@ document.querySelectorAll('.delivery-card').forEach(card=>{
       ? 'Hantar ke rumah dipilih — caj pos +RM8 (1–4 helai) atau +RM15 (5 helai ke atas). Pastikan alamat penghantaran diisi.'
       : 'Hantar ke sekolah dipilih — percuma.';
     deliveryHint.classList.add('ok');
+    addrField.style.display = deliveryMethod === 'home' ? 'block' : 'none';
+    if(deliveryMethod !== 'home') document.getElementById('custAddr').value = '';
     updateSplitAndReceipt();
   });
 });
@@ -1289,6 +1293,7 @@ submitBtn.addEventListener('click', async ()=>{
     document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
     deliveryHint.textContent = 'Sila pilih kaedah penghantaran.';
     deliveryHint.classList.remove('ok');
+    addrField.style.display = 'none';
     setQtyControlsEnabled(false);
     comboHint.textContent = 'Sila pilih combo di atas dahulu sebelum tetapkan kuantiti.';
     comboHint.classList.remove('ok');
