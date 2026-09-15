@@ -355,7 +355,7 @@
   <div class="nav-links">
     <a href="#posters">Produk</a>
     <a href="#saiz">Saiz</a>
-    <!-- <button class="admin-link" id="tabAdmin">Ejen login</button> -->
+    <button class="admin-link" id="tabAdmin">Ejen login</button>
   </div>
 </nav>
 
@@ -1320,8 +1320,15 @@ submitBtn.addEventListener('click', async ()=>{
 const mainContent = document.getElementById('mainContent');
 const adminSection = document.getElementById('adminSection');
 const tabAdminBtn = document.getElementById('tabAdmin');
+const ADMIN_PASSWORD = 'hendrixx26';
 if(tabAdminBtn){
   tabAdminBtn.addEventListener('click', ()=>{
+    const pass = prompt('Masukkan kata laluan admin:');
+    if(pass === null) return;
+    if(pass !== ADMIN_PASSWORD){
+      alert('Kata laluan salah.');
+      return;
+    }
     mainContent.style.display = 'none';
     adminSection.style.display = 'block';
     window.scrollTo(0,0);
