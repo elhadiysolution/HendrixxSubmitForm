@@ -211,6 +211,10 @@
   .stepper button{width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:#fff;font-size:16px;line-height:1;cursor:pointer;color:var(--navy);font-weight:600;}
   .stepper button:active{transform:scale(0.94);}
   .stepper input{width:46px;text-align:center;padding:6px 4px;font-family:'IBM Plex Mono',monospace;font-weight:600;}
+  .bk-stepper{display:flex;align-items:center;gap:8px;}
+  .bk-stepper button{width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:#fff;font-size:16px;line-height:1;cursor:pointer;color:var(--navy);font-weight:600;}
+  .bk-stepper button:active{transform:scale(0.94);}
+  .bk-stepper input{width:46px;text-align:center;padding:6px 4px;font-family:'IBM Plex Mono',monospace;font-weight:600;}
   .submit-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:13px;font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;margin-top:6px;}
   .submit-btn:hover{background:var(--navy-deep);}
   .submit-btn:disabled{background:#B4B2A9;cursor:not-allowed;}
@@ -643,6 +647,140 @@
       <p style="margin:0;">Tempahan dari semua ejen</p>
     </div>
     <div class="admin-stats" id="adminStats"></div>
+
+    <div class="section-head" style="text-align:left;max-width:none;margin-top:36px;">
+      <h2 style="margin-bottom:4px;">Bulk Submit Pesanan (Offline)</h2>
+      <p style="margin:0;">Untuk order yang dikumpul ejen secara offline (borang kertas) — resit tidak diperlukan. Harga combo/lycra/penghantaran dikira automatik sama macam borang pelanggan.</p>
+    </div>
+    <div class="card" style="max-width:720px;margin-top:16px;">
+      <div class="field">
+        <label>Nama ejen *</label>
+        <select id="bkAgentName">
+          <option value="">Pilih ejen</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sekolah *</label>
+        <select id="bkSchoolName">
+          <option value="">Pilih sekolah</option>
+          <option value="Mits Istana Bandar">Mits Istana Bandar</option>
+          <option value="Mits Alam Impian">Mits Alam Impian</option>
+          <option value="Mits Pandan Indah">Mits Pandan Indah</option>
+          <option value="Mits Sabak Bernam">Mits Sabak Bernam</option>
+          <option value="Mits Sepang">Mits Sepang</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Nama pelanggan <span class="required-tag">*</span></label>
+          <input type="text" id="bkCustName" placeholder="Nama pelanggan">
+        </div>
+        <div class="field">
+          <label>No. telefon</label>
+          <input type="tel" id="bkCustPhone" placeholder="01X-XXXXXXX">
+        </div>
+      </div>
+
+      <h3 class="formh" style="margin-top:18px;"><span class="num">1</span>Pilih Combo</h3>
+      <div class="combo-cards" id="bkComboCards">
+        @if(\Carbon\Carbon::now('Asia/Kuala_Lumpur')->lte(\Carbon\Carbon::parse('2026-09-05 23:59:59', 'Asia/Kuala_Lumpur')))
+        <div class="combo-card" data-type="earlybird" data-target="1">
+          <div class="cc-badge">Early Bird</div>
+          <div class="cc-title">1 Helai (Early Bird)</div>
+          <div class="cc-sub">Banin RM46 · banat RM52 · Sehingga 5 Sept</div>
+        </div>
+        @endif
+        <div class="combo-card" data-type="fixed" data-target="1">
+          <div class="cc-badge" style="visibility:hidden;">·</div>
+          <div class="cc-title">1 Helai</div>
+          <div class="cc-sub">Banin RM50 · banat RM56</div>
+        </div>
+        <div class="combo-card" data-type="fixed" data-target="5">
+          <div class="cc-badge">Popular</div>
+          <div class="cc-title">5 Helai</div>
+          <div class="cc-sub">Banin RM48 · banat RM54</div>
+        </div>
+        <div class="combo-card" data-type="fixed" data-target="7">
+          <div class="cc-badge">Jimat maksimum</div>
+          <div class="cc-title">7 Helai</div>
+          <div class="cc-sub">Banin RM46 · banat RM51</div>
+        </div>
+      </div>
+      <div class="combo-hint" id="bkComboHint">Sila pilih combo di atas dahulu sebelum tetapkan kuantiti.</div>
+
+      <h3 class="formh" style="margin-top:18px;"><span class="num">2</span>Bahagikan Kuantiti</h3>
+      <div class="qty-block" id="bkBlockLaki" style="flex-direction:column;align-items:stretch;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="lbl">Baju Banin<span id="bkRateLakiLabel">Pilih combo dahulu</span></div>
+          <div class="bk-stepper" style="justify-content:flex-end;">
+            <button type="button" data-target="bkQtyLaki" data-step="-1" disabled>−</button>
+            <input type="number" id="bkQtyLaki" value="0" min="0" disabled>
+            <button type="button" data-target="bkQtyLaki" data-step="1" disabled>+</button>
+          </div>
+        </div>
+        <div class="size-grid" id="bkSizeGridLaki"></div>
+        <div class="size-status" id="bkSizeStatusLaki"></div>
+        <div class="upgrade-row" style="flex-direction:column;align-items:stretch;">
+          <div class="lbl">Naik taraf Lycra Premium (ikut saiz)<span>+RM10 / helai — had ikut kuantiti saiz di atas</span></div>
+          <div class="size-grid" id="bkLycraGridLaki"></div>
+          <div class="size-status" id="bkLycraStatusLaki"></div>
+        </div>
+      </div>
+      <div class="qty-block" id="bkBlockMuslimah" style="flex-direction:column;align-items:stretch;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="lbl">Baju Banat<span id="bkRateMuslimahLabel">Pilih combo dahulu</span></div>
+          <div class="bk-stepper" style="justify-content:flex-end;">
+            <button type="button" data-target="bkQtyMuslimah" data-step="-1" disabled>−</button>
+            <input type="number" id="bkQtyMuslimah" value="0" min="0" disabled>
+            <button type="button" data-target="bkQtyMuslimah" data-step="1" disabled>+</button>
+          </div>
+        </div>
+        <div class="size-grid" id="bkSizeGridMuslimah"></div>
+        <div class="size-status" id="bkSizeStatusMuslimah"></div>
+        <div class="upgrade-row" style="flex-direction:column;align-items:stretch;">
+          <div class="lbl">Naik taraf Lycra Premium (ikut saiz)<span>+RM10 / helai — had ikut kuantiti saiz di atas</span></div>
+          <div class="size-grid" id="bkLycraGridMuslimah"></div>
+          <div class="size-status" id="bkLycraStatusMuslimah"></div>
+        </div>
+      </div>
+      <div class="split-status" id="bkSplitStatus"></div>
+
+      <h3 class="formh" style="margin-top:18px;"><span class="num">3</span>Kaedah Penghantaran</h3>
+      <div class="delivery-cards" id="bkDeliveryCards">
+        <div class="delivery-card" data-method="school">
+          <div class="dc-title">Hantar ke Sekolah</div>
+          <div class="dc-sub">Percuma — kutip di sekolah</div>
+        </div>
+        <div class="delivery-card" data-method="home">
+          <div class="dc-title">Hantar ke Rumah</div>
+          <div class="dc-sub">Pos +RM8 (1–4 helai) / +RM15 (5 helai ke atas)</div>
+        </div>
+      </div>
+      <div class="combo-hint" id="bkDeliveryHint">Sila pilih kaedah penghantaran.</div>
+
+      <div class="field" id="bkAddrField" style="display:none;">
+        <label>Alamat penghantaran <span class="required-tag">*</span></label>
+        <textarea id="bkCustAddr" placeholder="Alamat penuh untuk posting"></textarea>
+      </div>
+
+      <div class="field" style="margin-top:6px;">
+        <label>Catatan (saiz, warna, dll)</label>
+        <textarea id="bkOrderNotes" placeholder="Contoh: 2x saiz M, 1x saiz L"></textarea>
+      </div>
+
+      <button class="submit-btn" id="bkSubmitBtn">Hantar Pesanan (Offline)</button>
+      <div class="err" id="bkFormErr"></div>
+    </div>
+    <div class="receipt" style="max-width:720px;position:static;margin-top:16px;margin-bottom:36px;">
+      <div class="receipt-head">
+        <div class="tag">Ringkasan</div>
+        <div class="title">Anggaran Pesanan (Offline)</div>
+      </div>
+      <div class="receipt-body" id="bkReceiptBody">
+        <div class="empty-hint">Pilih combo dan masukkan kuantiti untuk lihat harga</div>
+      </div>
+    </div>
+
     <div class="search-row">
       <input type="text" id="searchAgent" placeholder="Search By Agent...">
       <select id="filterSchool">
@@ -727,12 +865,13 @@ const EARLYBIRD_RATE = {laki:46, muslimah:52};
 const LYCRA_SURCHARGE = 10;
 const SIZE_SURCHARGE = { '3XL':4, '4XL':4, '5XL':4, '6XL':6, '7XL':6, '8XL':6 };
 function sizeSurchargeFor(sz){ return SIZE_SURCHARGE[sz] || 0; }
-function ratesForCombo(sum){
-  if(selectedCombo && selectedCombo.type === 'earlybird'){
+function ratesForComboState(sum, comboState){
+  if(comboState && comboState.type === 'earlybird'){
     return EARLYBIRD_RATE;
   }
   return RATE_TABLE[tierForTotal(sum)] || {laki:0, muslimah:0};
 }
+function ratesForCombo(sum){ return ratesForComboState(sum, selectedCombo); }
 const SIZES = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL','7XL','8XL'];
 function tierForTotal(total){ if(total>=7) return 7; if(total>=5) return 5; if(total>=1) return 1; return 0; }
 
@@ -757,13 +896,16 @@ function buildSizeGrid(containerId, prefix){
 }
 buildSizeGrid('sizeGridLaki', 'szL');
 buildSizeGrid('sizeGridMuslimah', 'szM');
+buildSizeGrid('bkSizeGridLaki', 'bkszL');
+buildSizeGrid('bkSizeGridMuslimah', 'bkszM');
 
+const LYC_PREFIX_BY_SIZE_PREFIX = { szL:'lycL', szM:'lycM', bkszL:'bklycL', bkszM:'bklycM' };
 function lycraMaxForSize(sizePrefix, sz){
   const el = document.getElementById(sizePrefix + '_' + sz);
   return el ? (parseInt(el.value,10) || 0) : 0;
 }
 function clampLycraForSize(sizePrefix, sz){
-  const lycPrefix = sizePrefix === 'szL' ? 'lycL' : 'lycM';
+  const lycPrefix = LYC_PREFIX_BY_SIZE_PREFIX[sizePrefix];
   const lycEl = document.getElementById(lycPrefix + '_' + sz);
   if(!lycEl) return;
   const maxVal = lycraMaxForSize(sizePrefix, sz);
@@ -773,6 +915,12 @@ function clampAllLycra(){
   SIZES.forEach(sz=>{
     clampLycraForSize('szL', sz);
     clampLycraForSize('szM', sz);
+  });
+}
+function bkClampAllLycra(){
+  SIZES.forEach(sz=>{
+    clampLycraForSize('bkszL', sz);
+    clampLycraForSize('bkszM', sz);
   });
 }
 function buildLycraGrid(containerId, lycraPrefix, sizePrefix){
@@ -795,6 +943,8 @@ function buildLycraGrid(containerId, lycraPrefix, sizePrefix){
 }
 buildLycraGrid('lycraGridLaki', 'lycL', 'szL');
 buildLycraGrid('lycraGridMuslimah', 'lycM', 'szM');
+buildLycraGrid('bkLycraGridLaki', 'bklycL', 'bkszL');
+buildLycraGrid('bkLycraGridMuslimah', 'bklycM', 'bkszM');
 
 function getSizeCounts(prefix){
   const counts = {};
@@ -817,8 +967,9 @@ function sizeSurchargeBreakdown(prefix){
   });
   return { band4, band6, total: band4 * 4 + band6 * 6 };
 }
+const QTY_EL_BY_PREFIX = {};
 function sizeRemaining(prefix, excludeSize){
-  const qtyEl = prefix === 'szL' ? qtyLakiEl : qtyMuslimahEl;
+  const qtyEl = QTY_EL_BY_PREFIX[prefix];
   const qty = parseInt(qtyEl.value,10) || 0;
   const counts = getSizeCounts(prefix);
   let usedByOthers = 0;
@@ -843,9 +994,27 @@ const lycraStatusLaki = document.getElementById('lycraStatusLaki');
 const lycraStatusMuslimah = document.getElementById('lycraStatusMuslimah');
 const sizeStatusLaki = document.getElementById('sizeStatusLaki');
 const sizeStatusMuslimah = document.getElementById('sizeStatusMuslimah');
+QTY_EL_BY_PREFIX.szL = qtyLakiEl;
+QTY_EL_BY_PREFIX.szM = qtyMuslimahEl;
+
+const bkQtyLakiEl = document.getElementById('bkQtyLaki');
+const bkQtyMuslimahEl = document.getElementById('bkQtyMuslimah');
+const bkReceiptBody = document.getElementById('bkReceiptBody');
+const bkComboHint = document.getElementById('bkComboHint');
+const bkSplitStatus = document.getElementById('bkSplitStatus');
+const bkRateLakiLabel = document.getElementById('bkRateLakiLabel');
+const bkRateMuslimahLabel = document.getElementById('bkRateMuslimahLabel');
+const bkLycraStatusLaki = document.getElementById('bkLycraStatusLaki');
+const bkLycraStatusMuslimah = document.getElementById('bkLycraStatusMuslimah');
+const bkSizeStatusLaki = document.getElementById('bkSizeStatusLaki');
+const bkSizeStatusMuslimah = document.getElementById('bkSizeStatusMuslimah');
+QTY_EL_BY_PREFIX.bkszL = bkQtyLakiEl;
+QTY_EL_BY_PREFIX.bkszM = bkQtyMuslimahEl;
 
 let selectedCombo = null;
 let deliveryMethod = null;
+let bkSelectedCombo = null;
+let bkDeliveryMethod = null;
 
 function setQtyControlsEnabled(enabled){
   document.querySelectorAll('#blockLaki .stepper button, #blockLaki .stepper input, #blockMuslimah .stepper button, #blockMuslimah .stepper input').forEach(el=>{
@@ -856,10 +1025,39 @@ function setQtyControlsEnabled(enabled){
   setSizeInputsEnabled('lycL', enabled);
   setSizeInputsEnabled('lycM', enabled);
 }
+function bkSetQtyControlsEnabled(enabled){
+  document.querySelectorAll('#bkBlockLaki .bk-stepper button, #bkBlockLaki .bk-stepper input, #bkBlockMuslimah .bk-stepper button, #bkBlockMuslimah .bk-stepper input').forEach(el=>{
+    el.disabled = !enabled;
+  });
+  setSizeInputsEnabled('bkszL', enabled);
+  setSizeInputsEnabled('bkszM', enabled);
+  setSizeInputsEnabled('bklycL', enabled);
+  setSizeInputsEnabled('bklycM', enabled);
+}
 
-document.querySelectorAll('.combo-card').forEach(card=>{
+document.querySelectorAll('#bkComboCards .combo-card').forEach(card=>{
   card.addEventListener('click', ()=>{
-    document.querySelectorAll('.combo-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelectorAll('#bkComboCards .combo-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    const type = card.dataset.type;
+    const target = parseInt(card.dataset.target,10);
+    bkSelectedCombo = { type, target: (type === 'fixed' || type === 'earlybird') ? target : null };
+    bkSetQtyControlsEnabled(true);
+    if(type === 'earlybird'){
+      bkComboHint.textContent = 'Combo Early Bird dipilih — 1 helai sahaja. Tawaran sah sehingga 5 September.';
+    }else if(type === 'fixed'){
+      bkComboHint.textContent = `Combo ${target} helai dipilih. Bahagikan ${target} helai antara Laki dan Muslimah di bawah.`;
+    }else{
+      bkComboHint.textContent = 'Kuantiti sendiri dipilih. Harga akan ikut jumlah keseluruhan yang anda masukkan.';
+    }
+    bkComboHint.classList.add('ok');
+    bkUpdateSplitAndReceipt();
+  });
+});
+
+document.querySelectorAll('#comboCards .combo-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    document.querySelectorAll('#comboCards .combo-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     const type = card.dataset.type;
     const target = parseInt(card.dataset.target,10);
@@ -879,9 +1077,9 @@ document.querySelectorAll('.combo-card').forEach(card=>{
 
 const deliveryHint = document.getElementById('deliveryHint');
 const addrField = document.getElementById('addrField');
-document.querySelectorAll('.delivery-card').forEach(card=>{
+document.querySelectorAll('#deliveryCards .delivery-card').forEach(card=>{
   card.addEventListener('click', ()=>{
-    document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelectorAll('#deliveryCards .delivery-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     deliveryMethod = card.dataset.method;
     deliveryHint.textContent = deliveryMethod === 'home'
@@ -894,12 +1092,35 @@ document.querySelectorAll('.delivery-card').forEach(card=>{
   });
 });
 
+const bkDeliveryHint = document.getElementById('bkDeliveryHint');
+const bkAddrField = document.getElementById('bkAddrField');
+document.querySelectorAll('#bkDeliveryCards .delivery-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    document.querySelectorAll('#bkDeliveryCards .delivery-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    bkDeliveryMethod = card.dataset.method;
+    bkDeliveryHint.textContent = bkDeliveryMethod === 'home'
+      ? 'Hantar ke rumah dipilih — caj pos +RM8 (1–4 helai) atau +RM15 (5 helai ke atas). Pastikan alamat penghantaran diisi.'
+      : 'Hantar ke sekolah dipilih — percuma.';
+    bkDeliveryHint.classList.add('ok');
+    bkAddrField.style.display = bkDeliveryMethod === 'home' ? 'block' : 'none';
+    if(bkDeliveryMethod !== 'home') document.getElementById('bkCustAddr').value = '';
+    bkUpdateSplitAndReceipt();
+  });
+});
+
+function comboRemainingFor(otherEl, comboState){
+  if(!comboState || (comboState.type !== 'fixed' && comboState.type !== 'earlybird')) return Infinity;
+  const other = parseInt(otherEl.value,10) || 0;
+  return Math.max(0, comboState.target - other);
+}
 function comboRemaining(excludeEl){
-  if(!selectedCombo || (selectedCombo.type !== 'fixed' && selectedCombo.type !== 'earlybird')) return Infinity;
-  const other = excludeEl === qtyLakiEl
-    ? (parseInt(qtyMuslimahEl.value,10) || 0)
-    : (parseInt(qtyLakiEl.value,10) || 0);
-  return Math.max(0, selectedCombo.target - other);
+  const otherEl = excludeEl === qtyLakiEl ? qtyMuslimahEl : qtyLakiEl;
+  return comboRemainingFor(otherEl, selectedCombo);
+}
+function bkComboRemaining(excludeEl){
+  const otherEl = excludeEl === bkQtyLakiEl ? bkQtyMuslimahEl : bkQtyLakiEl;
+  return comboRemainingFor(otherEl, bkSelectedCombo);
 }
 
 document.querySelectorAll('.stepper button').forEach(btn=>{
@@ -926,24 +1147,56 @@ document.querySelectorAll('.stepper button').forEach(btn=>{
   });
 });
 
+document.querySelectorAll('.bk-stepper button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(btn.disabled) return;
+    const target = document.getElementById(btn.dataset.target);
+    const step = parseInt(btn.dataset.step,10);
+    let val = parseInt(target.value,10) || 0;
+    val = Math.max(0, val + step);
+    if((target === bkQtyLakiEl || target === bkQtyMuslimahEl) && step > 0){
+      val = Math.min(val, bkComboRemaining(target));
+    }
+    target.value = val;
+    bkUpdateSplitAndReceipt();
+  });
+});
+[bkQtyLakiEl, bkQtyMuslimahEl].forEach(el=>{
+  el.addEventListener('input', ()=>{
+    if(el.value === '') return;
+    let val = Math.max(0, parseInt(el.value,10) || 0);
+    val = Math.min(val, bkComboRemaining(el));
+    el.value = val;
+    bkUpdateSplitAndReceipt();
+  });
+});
+
 function fmt(n){ return 'RM' + n.toLocaleString('en-MY', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 
+function computeOrderFor(qL, qM, comboState, deliveryMethodVal, szPrefixL, szPrefixM, lycPrefixL, lycPrefixM){
+  const upgL = Math.min(getSizeSum(lycPrefixL), qL);
+  const upgM = Math.min(getSizeSum(lycPrefixM), qM);
+  const sum = qL + qM;
+  const tier = tierForTotal(sum);
+  const rates = ratesForComboState(sum, comboState);
+  const surL = sizeSurchargeBreakdown(szPrefixL);
+  const surM = sizeSurchargeBreakdown(szPrefixM);
+  const subL = qL * rates.laki + upgL * LYCRA_SURCHARGE + surL.total;
+  const subM = qM * rates.muslimah + upgM * LYCRA_SURCHARGE + surM.total;
+  const deliveryFee = deliveryMethodVal === 'home' ? homeDeliveryFee(sum) : 0;
+  const grandTotal = subL + subM + deliveryFee;
+  const commission = sum * RATE_EJEN;
+  return {qL,qM,upgL,upgM,lycraSurcharge:LYCRA_SURCHARGE,surL,surM,deliveryMethod:deliveryMethodVal,deliveryFee,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
+}
 function computeOrder(){
   const qL = parseInt(qtyLakiEl.value,10) || 0;
   const qM = parseInt(qtyMuslimahEl.value,10) || 0;
-  const upgL = Math.min(getSizeSum('lycL'), qL);
-  const upgM = Math.min(getSizeSum('lycM'), qM);
-  const sum = qL + qM;
-  const tier = tierForTotal(sum);
-  const rates = ratesForCombo(sum);
-  const surL = sizeSurchargeBreakdown('szL');
-  const surM = sizeSurchargeBreakdown('szM');
-  const subL = qL * rates.laki + upgL * LYCRA_SURCHARGE + surL.total;
-  const subM = qM * rates.muslimah + upgM * LYCRA_SURCHARGE + surM.total;
-  const deliveryFee = deliveryMethod === 'home' ? homeDeliveryFee(sum) : 0;
-  const grandTotal = subL + subM + deliveryFee;
-  const commission = sum * RATE_EJEN;
-  return {qL,qM,upgL,upgM,lycraSurcharge:LYCRA_SURCHARGE,surL,surM,deliveryMethod,deliveryFee,tier,rL:rates.laki,rM:rates.muslimah,subL,subM,total:grandTotal,commission,qtySum:sum};
+  return computeOrderFor(qL, qM, selectedCombo, deliveryMethod, 'szL', 'szM', 'lycL', 'lycM');
+}
+function bkComputeOrder(){
+  const qL = parseInt(bkQtyLakiEl.value,10) || 0;
+  const qM = parseInt(bkQtyMuslimahEl.value,10) || 0;
+  return computeOrderFor(qL, qM, bkSelectedCombo, bkDeliveryMethod, 'bkszL', 'bkszM', 'bklycL', 'bklycM');
 }
 
 function updateSplitAndReceipt(){
@@ -1017,11 +1270,80 @@ function updateSplitAndReceipt(){
   renderReceipt();
 }
 
-function renderReceipt(){
-  const o = computeOrder();
+function bkUpdateSplitAndReceipt(){
+  bkClampAllLycra();
+  const qL = parseInt(bkQtyLakiEl.value,10) || 0;
+  const qM = parseInt(bkQtyMuslimahEl.value,10) || 0;
+  const sum = qL + qM;
+  const tier = tierForTotal(sum);
+  const isEarlybird = bkSelectedCombo && bkSelectedCombo.type === 'earlybird';
+  const rates = ratesForComboState(sum, bkSelectedCombo);
+  const tierLabel = isEarlybird ? 'Early Bird' : (tier ? `${tier} helai` : null);
+  bkRateLakiLabel.textContent = tierLabel ? `Harga combo ${tierLabel}: ${fmt(rates.laki)}/pc` : 'Pilih combo dahulu';
+  bkRateMuslimahLabel.textContent = tierLabel ? `Harga combo ${tierLabel}: ${fmt(rates.muslimah)}/pc` : 'Pilih combo dahulu';
+
+  if(!bkSelectedCombo){
+    bkSplitStatus.className = 'split-status';
+    bkSplitStatus.textContent = 'Belum pilih combo.';
+  }else if(bkSelectedCombo.type === 'fixed' || bkSelectedCombo.type === 'earlybird'){
+    bkSplitStatus.className = 'split-status ' + (sum === bkSelectedCombo.target ? 'match' : 'mismatch');
+    bkSplitStatus.textContent = sum === bkSelectedCombo.target
+      ? `Sempurna — ${sum} / ${bkSelectedCombo.target} helai dibahagikan.`
+      : `Dipilih ${sum} / ${bkSelectedCombo.target} helai. Sila laraskan supaya jumlah tepat ${bkSelectedCombo.target}.`;
+  }else{
+    bkSplitStatus.className = 'split-status ' + (sum > 0 ? 'match' : '');
+    bkSplitStatus.textContent = sum > 0 ? `Jumlah keseluruhan: ${sum} helai (tier harga ${tier} helai).` : 'Masukkan kuantiti Laki / Muslimah.';
+  }
+
+  if(bkSelectedCombo){
+    document.querySelectorAll('.bk-stepper button[data-step="1"]').forEach(btn=>{
+      const t = document.getElementById(btn.dataset.target);
+      if(t === bkQtyLakiEl || t === bkQtyMuslimahEl){
+        btn.disabled = bkComboRemaining(t) <= 0;
+      }
+    });
+  }
+
+  const sizeSumL = getSizeSum('bkszL');
+  if(qL > 0){
+    bkSizeStatusLaki.className = 'size-status ' + (sizeSumL === qL ? 'match' : 'mismatch');
+    bkSizeStatusLaki.textContent = `Saiz: ${sizeSumL} / ${qL} helai`;
+  }else{
+    bkSizeStatusLaki.className = 'size-status';
+    bkSizeStatusLaki.textContent = '';
+  }
+  const sizeSumM = getSizeSum('bkszM');
+  if(qM > 0){
+    bkSizeStatusMuslimah.className = 'size-status ' + (sizeSumM === qM ? 'match' : 'mismatch');
+    bkSizeStatusMuslimah.textContent = `Saiz: ${sizeSumM} / ${qM} helai`;
+  }else{
+    bkSizeStatusMuslimah.className = 'size-status';
+    bkSizeStatusMuslimah.textContent = '';
+  }
+  ['bkszL','bkszM'].forEach(prefix=>{
+    SIZES.forEach(sz=>{
+      const el = document.getElementById(prefix + '_' + sz);
+      if(el) el.max = sizeRemaining(prefix, sz);
+    });
+  });
+  [['bkszL','bklycL'],['bkszM','bklycM']].forEach(([sizePrefix,lycPrefix])=>{
+    SIZES.forEach(sz=>{
+      const el = document.getElementById(lycPrefix + '_' + sz);
+      if(el) el.max = lycraMaxForSize(sizePrefix, sz);
+    });
+  });
+
+  const lycSumBkL = getSizeSum('bklycL');
+  bkLycraStatusLaki.textContent = lycSumBkL > 0 ? `Lycra: ${lycSumBkL} / ${qL} helai dinaik taraf` : '';
+  const lycSumBkM = getSizeSum('bklycM');
+  bkLycraStatusMuslimah.textContent = lycSumBkM > 0 ? `Lycra: ${lycSumBkM} / ${qM} helai dinaik taraf` : '';
+
+  bkRenderSummary();
+}
+
+function buildReceiptHtml(o){
   if(o.qL === 0 && o.qM === 0){
-    receiptBody.innerHTML = '<div class="empty-hint">Pilih combo dan masukkan kuantiti untuk lihat harga</div>';
-    return;
+    return '<div class="empty-hint">Pilih combo dan masukkan kuantiti untuk lihat harga</div>';
   }
   const surchargeLines = (label, sur)=>{
     let out = '';
@@ -1056,21 +1378,32 @@ function renderReceipt(){
   html += '<div class="rdash"></div>';
   html += `<div class="rtotal"><span>Jumlah</span><span>${fmt(o.total)}</span></div>`;
   html += `<div class="rnote">Komisen ejen untuk order ini: <strong>${fmt(o.commission)}</strong></div>`;
-  receiptBody.innerHTML = html;
+  return html;
+}
+function renderReceipt(){
+  receiptBody.innerHTML = buildReceiptHtml(computeOrder());
+}
+function bkRenderSummary(){
+  bkReceiptBody.innerHTML = buildReceiptHtml(bkComputeOrder());
 }
 updateSplitAndReceipt();
+bkUpdateSplitAndReceipt();
 
 async function loadAgentOptions(){
   const select = document.getElementById('agentName');
+  const bkSelect = document.getElementById('bkAgentName');
   try{
     const res = await fetch(SHEETS_WEBAPP_URL + '?type=agents');
     const data = await res.json();
     if(!data.ok) throw new Error(data.error || 'Gagal muat senarai ejen');
     const agents = data.agents || [];
-    select.innerHTML = '<option value="">Pilih ejen</option>' +
+    const optionsHtml = '<option value="">Pilih ejen</option>' +
       agents.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+    select.innerHTML = optionsHtml;
+    if(bkSelect) bkSelect.innerHTML = optionsHtml;
   }catch(e){
     select.innerHTML = '<option value="">Gagal muat senarai ejen</option>';
+    if(bkSelect) bkSelect.innerHTML = '<option value="">Gagal muat senarai ejen</option>';
   }
 }
 loadAgentOptions();
@@ -1078,7 +1411,7 @@ loadAgentOptions();
 document.querySelectorAll('.poster-cta').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const gender = btn.dataset.gender;
-    document.querySelectorAll('.combo-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelectorAll('#comboCards .combo-card').forEach(c=>c.classList.remove('selected'));
     selectedCombo = { type: 'custom', target: null };
     setQtyControlsEnabled(true);
     comboHint.textContent = 'Kuantiti sendiri dipilih. Harga akan ikut jumlah keseluruhan yang anda masukkan.';
@@ -1288,9 +1621,9 @@ submitBtn.addEventListener('click', async ()=>{
       document.getElementById('lycM_' + sz).value = 0;
     });
     selectedCombo = null;
-    document.querySelectorAll('.combo-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelectorAll('#comboCards .combo-card').forEach(c=>c.classList.remove('selected'));
     deliveryMethod = null;
-    document.querySelectorAll('.delivery-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelectorAll('#deliveryCards .delivery-card').forEach(c=>c.classList.remove('selected'));
     deliveryHint.textContent = 'Sila pilih kaedah penghantaran.';
     deliveryHint.classList.remove('ok');
     addrField.style.display = 'none';
@@ -1310,6 +1643,135 @@ submitBtn.addEventListener('click', async ()=>{
   }finally{
     submitBtn.disabled = false;
     submitBtn.textContent = 'Hantar Pesanan';
+  }
+});
+
+/* admin bulk (offline) order entry */
+const bkAgentNameEl = document.getElementById('bkAgentName');
+const bkSchoolNameEl = document.getElementById('bkSchoolName');
+const bkCustNameEl = document.getElementById('bkCustName');
+const bkCustPhoneEl = document.getElementById('bkCustPhone');
+const bkCustAddrEl = document.getElementById('bkCustAddr');
+const bkOrderNotesEl = document.getElementById('bkOrderNotes');
+const bkFormErr = document.getElementById('bkFormErr');
+const bkSubmitBtn = document.getElementById('bkSubmitBtn');
+
+bkSubmitBtn.addEventListener('click', async ()=>{
+  const agentName = bkAgentNameEl.value.trim();
+  const schoolName = bkSchoolNameEl.value;
+  const custName = bkCustNameEl.value.trim();
+  const custPhone = bkCustPhoneEl.value.trim();
+  const custAddr = bkCustAddrEl.value.trim();
+  const notes = bkOrderNotesEl.value.trim();
+  const o = bkComputeOrder();
+
+  bkFormErr.style.display = 'none';
+  if(!agentName){
+    bkFormErr.textContent = 'Sila masukkan nama ejen.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(!schoolName){
+    bkFormErr.textContent = 'Sila pilih sekolah.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(!custName){
+    bkFormErr.textContent = 'Sila masukkan nama pelanggan.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(!bkSelectedCombo){
+    bkFormErr.textContent = 'Sila pilih combo dahulu.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(o.qL === 0 && o.qM === 0){
+    bkFormErr.textContent = 'Sila masukkan sekurang-kurangnya 1 kuantiti baju.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if((bkSelectedCombo.type === 'fixed' || bkSelectedCombo.type === 'earlybird') && o.qtySum !== bkSelectedCombo.target){
+    bkFormErr.textContent = `Jumlah Laki + Muslimah mesti tepat ${bkSelectedCombo.target} helai untuk combo ini (sekarang ${o.qtySum}).`;
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  const sizeLaki = getSizeCounts('bkszL');
+  const sizeMuslimah = getSizeCounts('bkszM');
+  if(o.qL > 0 && getSizeSum('bkszL') !== o.qL){
+    bkFormErr.textContent = `Sila bahagikan saiz Baju Laki supaya jumlah tepat ${o.qL} helai.`;
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(o.qM > 0 && getSizeSum('bkszM') !== o.qM){
+    bkFormErr.textContent = `Sila bahagikan saiz Baju Muslimah supaya jumlah tepat ${o.qM} helai.`;
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(!bkDeliveryMethod){
+    bkFormErr.textContent = 'Sila pilih kaedah penghantaran.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+  if(bkDeliveryMethod === 'home' && !custAddr){
+    bkFormErr.textContent = 'Sila isi alamat penghantaran untuk hantar ke rumah.';
+    bkFormErr.style.display = 'block';
+    return;
+  }
+
+  const order = {
+    agentName, schoolName, custName, custPhone, custAddr,
+    notes: (notes ? notes + ' | ' : '') + '(Bulk/Offline entry oleh admin)',
+    comboType: bkSelectedCombo.type, comboTarget: bkSelectedCombo.target,
+    qtyLaki: o.qL, qtyMuslimah: o.qM,
+    upgradeQtyLaki: o.upgL, upgradeQtyMuslimah: o.upgM, lycraSurcharge: o.lycraSurcharge,
+    sizeSurchargeLaki: o.surL.total, sizeSurchargeMuslimah: o.surM.total,
+    deliveryMethod: o.deliveryMethod, deliveryFee: o.deliveryFee,
+    lycraSizeLaki: getSizeCounts('bklycL'), lycraSizeMuslimah: getSizeCounts('bklycM'),
+    sizeLaki, sizeMuslimah,
+    priceLaki: o.rL, priceMuslimah: o.rM,
+    subtotalLaki: o.subL, subtotalMuslimah: o.subM,
+    total: o.total, commission: o.commission,
+    receiptData: null, receiptMimeType: null, receiptFileName: null,
+    timestamp: Date.now()
+  };
+  bkSubmitBtn.disabled = true;
+  bkSubmitBtn.textContent = 'Menghantar...';
+  try{
+    const res = await fetch(SHEETS_WEBAPP_URL, { method: 'POST', body: JSON.stringify(order) });
+    const result = await res.json();
+    if(!result.ok) throw new Error(result.error || 'Gagal simpan ke Google Sheet');
+    showToast('Order offline dihantar — ' + custName);
+    bkCustNameEl.value = '';
+    bkCustPhoneEl.value = '';
+    bkCustAddrEl.value = '';
+    bkOrderNotesEl.value = '';
+    bkQtyLakiEl.value = 0;
+    bkQtyMuslimahEl.value = 0;
+    SIZES.forEach(sz=>{
+      document.getElementById('bkszL_' + sz).value = 0;
+      document.getElementById('bkszM_' + sz).value = 0;
+      document.getElementById('bklycL_' + sz).value = 0;
+      document.getElementById('bklycM_' + sz).value = 0;
+    });
+    bkSelectedCombo = null;
+    document.querySelectorAll('#bkComboCards .combo-card').forEach(c=>c.classList.remove('selected'));
+    bkDeliveryMethod = null;
+    document.querySelectorAll('#bkDeliveryCards .delivery-card').forEach(c=>c.classList.remove('selected'));
+    bkDeliveryHint.textContent = 'Sila pilih kaedah penghantaran.';
+    bkDeliveryHint.classList.remove('ok');
+    bkAddrField.style.display = 'none';
+    bkSetQtyControlsEnabled(false);
+    bkComboHint.textContent = 'Sila pilih combo di atas dahulu sebelum tetapkan kuantiti.';
+    bkComboHint.classList.remove('ok');
+    bkUpdateSplitAndReceipt();
+    loadOrders();
+  }catch(e){
+    bkFormErr.textContent = 'Gagal hantar pesanan. Sila cuba lagi.';
+    bkFormErr.style.display = 'block';
+  }finally{
+    bkSubmitBtn.disabled = false;
+    bkSubmitBtn.textContent = 'Hantar Pesanan (Offline)';
   }
 });
 
